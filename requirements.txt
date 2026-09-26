@@ -1,0 +1,5 @@
+# AI Berkshire 的 tools/ 脚本只依赖 Python 标准库，无需安装第三方包。
+# 此文件供部署平台（如 Render 的 `pip install -r requirements.txt`）使用。
+#
+# 可选依赖：tools/xueqiu_scraper.py 需要 Playwright（本地按需安装）：
+#   pip install playwright && playwright install chromium
