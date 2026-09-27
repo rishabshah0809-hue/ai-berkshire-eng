@@ -1,0 +1,6 @@
+# 报告浏览网站（streamlit_app.py）依赖。部署到 Streamlit Community Cloud / Render 时自动安装。
+# tools/ 下的脚本只用 Python 标准库，无需额外依赖。
+#
+# 可选：tools/xueqiu_scraper.py 需要 Playwright（本地按需安装）：
+#   pip install playwright && playwright install chromium
+streamlit>=1.37
