@@ -8,12 +8,34 @@ import json
 from pathlib import Path
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 ROOT = Path(__file__).resolve().parent
 INDEX = ROOT / "reports" / "index.json"
 MAX_CHARS = 300_000  # 超大文件（如全量发言记录）只渲染前一部分，避免页面卡死
 
 st.set_page_config(page_title="AI Berkshire 研究报告", page_icon="📈", layout="wide")
+
+# 浏览器“翻译此页”会把文字节点替换成 <font>，React 再更新时报
+# "Failed to execute 'removeChild' on 'Node'" 并整页崩溃。
+# 给主页面打补丁（参见 facebook/react#11538），让翻译后仍能正常切换报告。
+components.html(
+    """<script>
+    const w = window.parent;
+    if (!w.__translatePatched) {
+      w.__translatePatched = true;
+      const P = w.Node.prototype, remove = P.removeChild, insert = P.insertBefore;
+      P.removeChild = function (child) {
+        return child.parentNode === this ? remove.call(this, child)
+          : (child.parentNode ? remove.call(child.parentNode, child) : child);
+      };
+      P.insertBefore = function (node, ref) {
+        return ref && ref.parentNode !== this ? this.appendChild(node) : insert.call(this, node, ref);
+      };
+    }
+    </script>""",
+    height=0,
+)
 
 
 @st.cache_data
